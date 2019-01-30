@@ -4,10 +4,8 @@ import com.addolux.purchaserequest.dto.PurchaseRequestDTO;
 import com.addolux.purchaserequest.repository.PurchaseRequestRepository;
 import com.addolux.purchaserequest.service.PurchaseRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseRequestServiceImpl implements PurchaseRequestService {
