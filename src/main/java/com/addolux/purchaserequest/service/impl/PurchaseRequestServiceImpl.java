@@ -4,7 +4,9 @@ import com.addolux.purchaserequest.dto.PurchaseRequestDTO;
 import com.addolux.purchaserequest.repository.PurchaseRequestRepository;
 import com.addolux.purchaserequest.service.PurchaseRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,20 +17,24 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
 
     @Override
     public List<PurchaseRequestDTO> getAllPurchaseRequests() {
-        return getDummyPurchaseRequestData();
+        if (purchaseRequestRepository.count() == 0 ) {
+
+            PurchaseRequestDTO purchaseRequestDTO1 = new PurchaseRequestDTO();
+            purchaseRequestDTO1.setJustification("Justification 1");
+            purchaseRequestDTO1.setDate(LocalDate.now());
+            purchaseRequestDTO1.setPoNumber("1234");
+
+            purchaseRequestRepository.save(purchaseRequestDTO1);
+
+            PurchaseRequestDTO purchaseRequestDTO2 = new PurchaseRequestDTO();
+            purchaseRequestDTO2.setJustification("Justification 2");
+            purchaseRequestDTO2.setDate(LocalDate.now().minusDays(2));
+            purchaseRequestDTO2.setPoNumber("5678");
+
+            purchaseRequestRepository.save(purchaseRequestDTO2);
+        }
+
+        return (List<PurchaseRequestDTO>) purchaseRequestRepository.findAll();
     }
 
-    private List<PurchaseRequestDTO> getDummyPurchaseRequestData() {
-        List<PurchaseRequestDTO> purchaseRequestDTOs = new ArrayList<PurchaseRequestDTO>();
-        //Create dummy data here
-
-        PurchaseRequestDTO purchaseRequestDTO = new PurchaseRequestDTO();
-        purchaseRequestDTO.setDate("12345");
-        purchaseRequestDTO.setJustification("thes are words");
-        purchaseRequestDTO.setPoNumber("12345");
-
-
-        purchaseRequestDTOs.add(purchaseRequestRepository.save(purchaseRequestDTO));
-        return purchaseRequestDTOs;
-    }
 }

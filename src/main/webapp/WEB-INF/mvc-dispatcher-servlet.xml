@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans                 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd                  http://www.springframework.org/schema/context                 http://www.springframework.org/schema/context/spring-context-4.0.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans                 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd                  http://www.springframework.org/schema/context                 http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     <context:component-scan base-package="com.addolux"/>
     <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -11,76 +10,5 @@
     </bean>
     <bean id="purchaseRequestService" class="com.addolux.purchaserequest.service.impl.PurchaseRequestServiceImpl"/>
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="jdbc:postgresql://localhost:5432/mydb" />
-        <property name="username" value="my_user" />
-        <property name="password" value="password" />
-    </bean>
-
-    <jpa:repositories base-package="com.addolux.purchaserequest.repository"/>
-
-
-    <!-- Create default configuration for Hibernate -->
-
-    <!-- Configure the entity manager factory bean -->
-    <bean id="entityManagerFactory"
-              class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.addolux.purchaserequest.dto"/>
-        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
-        <!-- Set JPA properties -->
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
-            </props>
-        </property>
-    </bean>
-
-    <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-        <property name="showSql" value="true"/>
-        <property name="generateDdl" value="true"/>
-        <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
-    </bean>
-    
-    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">-->
-    <!--<property name="dataSource" ref="dataSource"></property>-->
-    <!--<property name="annotatedClasses">-->
-        <!--<list>-->
-            <!--<value>com.sabbir.model.Employee</value>-->
-        <!--</list>-->
-    <!--</property>-->
-    <!--<property name="hibernateProperties">-->
-        <!--<props>-->
-            <!--<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>-->
-            <!--<prop key="hibernate.show_sql">true</prop>-->
-        <!--</props>-->
-    <!--</property>-->
-
-    <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource"
-                  ref="dataSource"/>
-        <property name="packagesToScan"
-                  value="com.addolux.purchaserequest.dto"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.hbm2ddl.auto">
-                    create-drop
-                </prop>
-                <prop key="hibernate.dialect">
-                    org.hibernate.dialect.PostgreSQL9Dialect
-                </prop>
-            </props>
-        </property>
-    </bean>
-
-
-
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-
+    <import resource="data-config.xml"/>
 </beans>
